@@ -7,10 +7,10 @@ function is_safe(input::String)
         return false
     end
 
-    is_increasing = parts[2] > parts[1]
     last = parts[1]
+    is_increasing = parts[2] > last
 
-    for i in 2:length(parts)
+    for i in 2:lastindex(parts)
         difference = parts[i] - last
         if (is_increasing && (difference < 1 || difference > 3)) ||
            (!is_increasing && (difference > -1 || difference < -3))

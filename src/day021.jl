@@ -1,11 +1,11 @@
 module julia_2024
 
 function is_safe(input::String)
-    parts = map(x -> parse(Int, String(x)), split(input))
+    parts = map(x -> parse(Int, x), split(input))
     last = parts[2]
     difference = last - parts[1]
     if (difference > 0)
-        for i in 3:length(parts)
+        for i in 3:lastindex(parts)
             difference = parts[i] - last
             if (difference < 1 || difference > 3)
                 return false
@@ -13,7 +13,7 @@ function is_safe(input::String)
             last = parts[i]
         end
     elseif (difference < 0)
-        for i in 3:length(parts)
+        for i in 3:lastindex(parts)
             difference = last - parts[i]
             if (difference < 1 || difference > 3)
                 return false
