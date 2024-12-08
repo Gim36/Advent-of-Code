@@ -1,25 +1,29 @@
 module julia_2024
 
-function is_safe(input::String)
-    parts = map(x -> parse(Int, x), split(input))
-
+function is_safe(parts::Vector{Int})
     if length(parts) < 2
-        return false
+        return true
     end
 
-    last = parts[1]
-    is_increasing = parts[2] > last
-
+    get_difference = parts[2] > parts[1] ? (x, y) -> x - y : (x, y) -> y - x
     for i in 2:lastindex(parts)
-        difference = parts[i] - last
-        if (is_increasing && (difference < 1 || difference > 3)) ||
-           (!is_increasing && (difference > -1 || difference < -3))
+        difference = get_difference(parts[i], parts[i-1])
+        if (difference < 1 || difference > 3)
             return false
         end
-        last = parts[i]
     end
 
     return true
+end
+
+function can_be_safe(parts::Vector{Int})
+    for (i, _) in enumerate(parts)
+        if is_safe(deleteat!(copy(parts), i))
+            return true
+        end
+    end
+
+    return false
 end
 
 function day02()
@@ -30,7 +34,8 @@ function day02()
             return counter
         end
 
-        if is_safe(input)
+        parts = map(x -> parse(Int, x), split(input))
+        if is_safe(parts) || can_be_safe(parts)
             counter += 1
         end
     end

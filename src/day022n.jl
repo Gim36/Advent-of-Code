@@ -1,7 +1,6 @@
 module julia_2024
 
-function is_safe(input::String)
-    parts = map(x -> parse(Int, x), split(input))
+function is_safe(parts::Vector{Int}, bad_found::Bool=true)
     if length(parts) < 2
         return true
     end
@@ -10,11 +9,23 @@ function is_safe(input::String)
     for i in 2:lastindex(parts)
         difference = get_difference(parts[i], parts[i-1])
         if (difference < 1 || difference > 3)
-            return false
+            if (bad_found)
+                return false
+            else
+                return is_safe(deleteat!(copy(parts), i - 1)) || is_safe(deleteat!(parts, i))
+            end
         end
     end
 
     return true
+end
+
+function can_be_safe(parts::Vector{Int})
+    for i in parts
+        if is_safe()
+            return true
+        end
+    end
 end
 
 function day02()
@@ -25,7 +36,7 @@ function day02()
             return counter
         end
 
-        if is_safe(input)
+        if is_safe(map(x -> parse(Int, x), split(input)), false)
             counter += 1
         end
     end
