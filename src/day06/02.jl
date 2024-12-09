@@ -1,34 +1,39 @@
 module julia_2024
 
-shift = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 @enum Field begin
     Dot
     Wall
-    Plus
+    Up
+    Right
+    Down
+    Left
 end
+
+shift = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+pluses = [Up, Right, Down, Left]
 
 function is_field(i::Int, j::Int, n::Int, m::Int)
     return i >= 1 && i <= n && j >= 1 && j <= m
 end
 
-function check_for_loop(inputs::Vector{Vector{Field}}, pluses::Matrix{Int}, i::Int, j::Int, next::Int=1)
+function check_for_loop(inputs::Vector{Vector{Field}}, i::Int, j::Int, next::Int=1)
     i_next = i + shift[next][1]
     j_next = j + shift[next][2]
     if is_field(i_next, j_next, length(inputs), length(inputs[1]))
         next_field = inputs[i_next][j_next]
         if next_field == Wall
-            if inputs[i][j] == Plus
-                if pluses[i, j] == next
+            if !(inputs[i][j] in [Dot, Wall])
+                plus = findfirst(x -> x == inputs[i][j], pluses)
+                if plus == next
                     return 1
                 end
             else
-                inputs[i][j] = Plus
-                pluses[i, j] = next
+                inputs[i][j] = pluses[next]
             end
 
-            return check_for_loop(inputs, pluses, i, j, (next % 4) + 1)
+            return check_for_loop(inputs, i, j, (next % 4) + 1)
         else
-            return check_for_loop(inputs, pluses, i_next, j_next, next)
+            return check_for_loop(inputs, i_next, j_next, next)
         end
     else
         return 0
@@ -50,8 +55,7 @@ function day062()
 
                     new_inputs = [copy(row) for row in inputs]
                     new_inputs[i][j] = Wall
-                    pluses = fill(0, length(inputs), length(inputs[1]))
-                    result += check_for_loop(new_inputs, pluses, position[1], position[2])
+                    result += check_for_loop(new_inputs, position[1], position[2])
                 end
             end
 
