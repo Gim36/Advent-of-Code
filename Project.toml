@@ -2,3 +2,9 @@ name = "julia_2024"
 uuid = "17ee3bbb-0e1d-4708-8d05-7c0b8a13ad25"
 authors = ["Ryoschin <nikolagagic5127@gmail.com>"]
 version = "0.1.0"
+
+[deps]
+Match = "7eb4fadd-790c-5f42-8a69-bfa0b872bfbf"
+
+[compat]
+Match = "2.3.0"

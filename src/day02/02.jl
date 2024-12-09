@@ -1,6 +1,6 @@
 module julia_2024
 
-function is_safe(parts::Vector{Int})
+function is_safe(parts::Vector{Int}, bad_found::Bool=true)
     if length(parts) < 2
         return true
     end
@@ -9,24 +9,19 @@ function is_safe(parts::Vector{Int})
     for i in 2:lastindex(parts)
         difference = get_difference(parts[i], parts[i-1])
         if (difference < 1 || difference > 3)
-            return false
+            if (bad_found)
+                return false
+            else
+                parts2 = vcat(parts[1:i-1], parts[i+1:end])
+                return is_safe(vcat(parts[1:i-2], parts[i:end])) || is_safe(parts2)
+            end
         end
     end
 
     return true
 end
 
-function can_be_safe(parts::Vector{Int})
-    for (i, _) in enumerate(parts)
-        if is_safe(deleteat!(copy(parts), i))
-            return true
-        end
-    end
-
-    return false
-end
-
-function day02()
+function day022()
     counter = 0
     while true
         input = readline()
@@ -35,12 +30,12 @@ function day02()
         end
 
         parts = map(x -> parse(Int, x), split(input))
-        if is_safe(parts) || can_be_safe(parts)
+        if is_safe(parts, false) || is_safe(parts[2:end], true)
             counter += 1
         end
     end
 end
 
-println(day02())
+println(day022())
 
 end # module julia_2024

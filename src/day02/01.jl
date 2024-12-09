@@ -17,7 +17,7 @@ function is_safe(input::String)
     return true
 end
 
-function day02()
+function day021()
     counter = 0
     while true
         input = readline()
@@ -31,6 +31,6 @@ function day02()
     end
 end
 
-println(day02())
+println(day021())
 
 end # module julia_2024

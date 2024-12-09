@@ -1,6 +1,6 @@
 module julia_2024
 
-function day01()
+function day011()
     array1 = Int[]
     array2 = Int[]
     while true
@@ -23,6 +23,6 @@ function day01()
     return dist
 end
 
-println(day01())
+println(day011())
 
 end # module julia_2024

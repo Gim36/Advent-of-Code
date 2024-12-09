@@ -1,6 +1,6 @@
 module julia_2024
 
-function day01()
+function day012()
     array1 = Int[]
     map2 = Dict{Int,Int}()
     while true
@@ -27,6 +27,6 @@ function day01()
     return score
 end
 
-println(day01())
+println(day012())
 
 end # module julia_2024
