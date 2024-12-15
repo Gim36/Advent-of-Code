@@ -2,7 +2,6 @@ module julia_2024
 
 function day091()
     input = readline()
-    input = "12345"
     a = Vector{Array{Int,1}}()
     for i in 1:lastindex(input)
         num = parse(Int, input[i])
@@ -11,36 +10,31 @@ function day091()
 
     l = 2
     r = lastindex(a)
-    oldr = r
     while l < r
         if a[r][2] < a[l][2]
             a[l][2] -= a[r][2]
-            insert!(a, l, a[r])
+            new = copy(a[r])
+            a[r][1] = -1
+            insert!(a, l, new)
             l += 1
+            r -= 1
         else
             a[l][1] = a[r][1]
             a[r][2] -= a[l][2]
             l += 2
 
             if a[r][2] == 0
-                oldr = r
+                a[r][1] = -1
                 r -= 2
             end
         end
     end
 
-    println(r)
-    return a[1:r]
-
     counter = 0
     result = 0
     for i in 1:lastindex(a)
-        if i > r
+        if a[i][1] == -1
             return result
-        end
-
-        if a[i][1] == -1 || a[i][2] == 0
-            continue
         end
 
         for j in 1:a[i][2]
